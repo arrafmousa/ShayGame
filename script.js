@@ -1,4 +1,11 @@
+const board = document.getElementById('game-board');
+const status = document.getElementById('status');
+let flippedCards = [];
+let matchedCount = 0;
+
+// Update these to match your actual filenames (without extension)
 const symbols = ['apple', 'banana', 'grape', 'cherry', 'strawberry', 'kiwi', 'pineapple', 'watermelon'];
+
 const cards = [...symbols, ...symbols]
   .sort(() => 0.5 - Math.random())
   .map((name, index) => {
@@ -10,9 +17,8 @@ const cards = [...symbols, ...symbols]
     const img = document.createElement('img');
     img.src = `images/${name}.png`;
     img.alt = name;
-    img.className = 'hidden-img'; // initially hidden
-    card.appendChild(img);
 
+    card.appendChild(img);
     card.addEventListener('click', () => flipCard(card));
     board.appendChild(card);
     return card;
@@ -22,7 +28,6 @@ function flipCard(card) {
   if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
   if (flippedCards.length === 2) return;
 
-  card.querySelector('img').classList.remove('hidden-img');
   card.classList.add('flipped');
   flippedCards.push(card);
 
@@ -32,10 +37,12 @@ function flipCard(card) {
       first.classList.add('matched');
       second.classList.add('matched');
       flippedCards = [];
+      matchedCount += 2;
+      if (matchedCount === cards.length) {
+        status.textContent = '🎉 You Win!';
+      }
     } else {
       setTimeout(() => {
-        first.querySelector('img').classList.add('hidden-img');
-        second.querySelector('img').classList.add('hidden-img');
         first.classList.remove('flipped');
         second.classList.remove('flipped');
         flippedCards = [];
