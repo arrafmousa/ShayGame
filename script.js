@@ -3,8 +3,7 @@ const status = document.getElementById('status');
 let flippedCards = [];
 let matchedCount = 0;
 
-// Update these to match your actual filenames (without extension)
-const symbols = ['apple', 'banana', 'grape', 'cherry', 'strawberry', 'kiwi', 'pineapple', 'watermelon'];
+const symbols = ['download', 'download (1)', 'download (2)', 'download (3)', 'download (4)'];
 
 const cards = [...symbols, ...symbols]
   .sort(() => 0.5 - Math.random())
