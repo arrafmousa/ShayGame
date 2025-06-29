@@ -1,17 +1,18 @@
-const board = document.getElementById('game-board');
-const status = document.getElementById('status');
-let flippedCards = [];
-let matchedCount = 0;
-
-const symbols = ['🍎', '🍌', '🍇', '🍒', '🍓', '🥝', '🍍', '🍉'];
+const symbols = ['apple', 'banana', 'grape', 'cherry', 'strawberry', 'kiwi', 'pineapple', 'watermelon'];
 const cards = [...symbols, ...symbols]
   .sort(() => 0.5 - Math.random())
-  .map((symbol, index) => {
+  .map((name, index) => {
     const card = document.createElement('div');
     card.className = 'card';
-    card.dataset.symbol = symbol;
+    card.dataset.name = name;
     card.dataset.index = index;
-    card.textContent = '';
+
+    const img = document.createElement('img');
+    img.src = `images/${name}.png`;
+    img.alt = name;
+    img.className = 'hidden-img'; // initially hidden
+    card.appendChild(img);
+
     card.addEventListener('click', () => flipCard(card));
     board.appendChild(card);
     return card;
@@ -21,25 +22,20 @@ function flipCard(card) {
   if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
   if (flippedCards.length === 2) return;
 
-  card.textContent = card.dataset.symbol;
+  card.querySelector('img').classList.remove('hidden-img');
   card.classList.add('flipped');
   flippedCards.push(card);
 
   if (flippedCards.length === 2) {
     const [first, second] = flippedCards;
-    if (first.dataset.symbol === second.dataset.symbol) {
+    if (first.dataset.name === second.dataset.name) {
       first.classList.add('matched');
       second.classList.add('matched');
-      matchedCount += 2;
       flippedCards = [];
-
-      if (matchedCount === cards.length) {
-        status.textContent = '🎉 You Win!';
-      }
     } else {
       setTimeout(() => {
-        first.textContent = '';
-        second.textContent = '';
+        first.querySelector('img').classList.add('hidden-img');
+        second.querySelector('img').classList.add('hidden-img');
         first.classList.remove('flipped');
         second.classList.remove('flipped');
         flippedCards = [];
